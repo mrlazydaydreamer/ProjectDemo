@@ -15,16 +15,18 @@ import java.security.NoSuchAlgorithmException;
 
 public class Login extends AppCompatActivity {
     private ProgressDialog pg;
+    TextView textView, textView1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         pg = new ProgressDialog(this);
+        textView = findViewById(R.id.editText);
+        textView1 = findViewById(R.id.editText3);
     }
 
     public void loginClick(View v){
-        TextView textView = findViewById(R.id.editText);
-        TextView textView1 = findViewById(R.id.editText3);
+
         try {
             loginAction(textView.getText().toString(), textView1.getText().toString());
         } catch (InterruptedException e) {
@@ -51,16 +53,19 @@ public class Login extends AppCompatActivity {
             return;
         }
         System.out.print(password);
-        AsyncTask lp = new LoginProcess(new LoginProcess.LoginResult() {
+        new LoginProcess(new LoginProcess.LoginResult() {
             @Override
             public void loginSuccessful() {
                 pg.dismiss();
+                textView.setText("");
+                textView1.setText("");
                 Toast.makeText(getApplicationContext(),"Login Successful",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void loginFailed() {
                 pg.dismiss();
+                textView1.setText("");
                 Toast.makeText(getApplicationContext(),"Login Failed",Toast.LENGTH_LONG).show();
             }
         }).execute(username,password);

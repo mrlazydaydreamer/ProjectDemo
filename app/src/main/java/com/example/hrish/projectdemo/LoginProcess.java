@@ -41,7 +41,7 @@ public class LoginProcess extends AsyncTask<String,String,String> {
             os.close();
 
             int responseCode = conn.getResponseCode();
-            System.out.println("GET Response Code :: " + responseCode);
+            System.out.println("POST Response Code :: " + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) { // success
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         conn.getInputStream()));
