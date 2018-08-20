@@ -25,8 +25,9 @@ public class LoginProcess extends AsyncTask<String,String,String> {
 
     @Override
     protected String doInBackground(String... strings) {
+        String finalResponse="";
         try {
-            URL url = new URL("www");
+            URL url = new URL("https://dhsv.000webhostapp.com/app/mobile/login.php");
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("User-Agent","APP_USER");
@@ -34,8 +35,8 @@ public class LoginProcess extends AsyncTask<String,String,String> {
 
             conn.setDoOutput(true);
             OutputStream os = conn.getOutputStream();
-            os.write(("email="+strings[0]).getBytes());
-            os.write(("password"+strings[1]).getBytes());
+            os.write(("email="+strings[0]+"&"+"password="+strings[1]).getBytes());
+            //os.write(().getBytes());
             os.flush();
             os.close();
 
@@ -51,8 +52,10 @@ public class LoginProcess extends AsyncTask<String,String,String> {
                     response.append(inputLine);
                 }
                 in.close();
-
+                finalResponse=response.toString();
                 // print result
+
+
                 System.out.println(response.toString());
             } else {
                 System.out.println("Login Failed Error:L010");
@@ -63,7 +66,7 @@ public class LoginProcess extends AsyncTask<String,String,String> {
         }
 
 
-        return null;
+        return finalResponse;
     }
 
 

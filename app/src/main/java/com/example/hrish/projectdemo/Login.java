@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigInteger;
@@ -12,15 +14,23 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Login extends AppCompatActivity {
-    final ProgressDialog pg = new ProgressDialog(this);
+    private ProgressDialog pg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Toast.makeText(this,"WEB URL NOT ADDED TO APP CHECK THE CODE",Toast.LENGTH_LONG).show();
+        pg = new ProgressDialog(this);
     }
 
+    public void loginClick(View v){
+        TextView textView = findViewById(R.id.editText);
+        TextView textView1 = findViewById(R.id.editText3);
+        try {
+            loginAction(textView.getText().toString(), textView1.getText().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     protected void loginAction(String username, String password) throws InterruptedException {
         if(username==null||password==null)
             return;
@@ -40,23 +50,22 @@ public class Login extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Error:L017",Toast.LENGTH_LONG).show();
             return;
         }
+        System.out.print(password);
         AsyncTask lp = new LoginProcess(new LoginProcess.LoginResult() {
             @Override
             public void loginSuccessful() {
+                pg.dismiss();
                 Toast.makeText(getApplicationContext(),"Login Successful",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void loginFailed() {
+                pg.dismiss();
                 Toast.makeText(getApplicationContext(),"Login Failed",Toast.LENGTH_LONG).show();
             }
         }).execute(username,password);
         pg.setMessage("Logging In...");
         pg.show();
-        while (lp.getStatus()!=AsyncTask.Status.FINISHED){
-            this.wait(1000);
-        }
-        pg.dismiss();
     }
 }
 
